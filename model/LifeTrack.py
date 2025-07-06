@@ -21,9 +21,21 @@ class LifeTrack:
             output_text += f"{str(event)}\n"
         
         return output_text
+    
+    def to_html(self):
+        output_html = "<div>\n"
+
+        output_html += "<h1>Calendar:</h1>"
+
+        for event in self.events:
+            output_html += event.to_html()
+        
+        output_html += "</div>"
+
+        return output_html
 
     def send_daily_email(self):
         self.update_google_calendar_events()
         date_today = datetime.now().strftime("%m/%d/%Y")
 
-        send_email(subject=f"Daily Email {date_today}", contents=self.get_text())
+        send_email(subject=f"Daily Email {date_today}", contents=self.to_html())

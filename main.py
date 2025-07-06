@@ -1,6 +1,6 @@
-from model import LifeTrack
+from model.LifeTrack import LifeTrack
 
-from src import get_event_components
+from src.access_google_calendar import get_event_components
 
 def main():
     life_track = LifeTrack()
