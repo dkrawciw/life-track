@@ -1,7 +1,7 @@
 from datetime import datetime
-from Event import Event
-from access_google_calendar import get_event_components
-from send_email import send_email
+from model.Event import Event
+from src.access_google_calendar import get_event_components
+from src.send_email import send_email
 
 class LifeTrack:
     """
