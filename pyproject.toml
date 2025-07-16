@@ -11,6 +11,7 @@ dependencies = [
     "google-auth-oauthlib>=1.2.2",
     "ipykernel>=6.29.5",
     "keyring>=25.6.0",
+    "pandas>=2.3.1",
     "spotipy>=2.25.1",
     "yagmail>=0.15.293",
 ]

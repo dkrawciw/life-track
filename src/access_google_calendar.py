@@ -76,23 +76,3 @@ def get_calendar_events() -> list:
     except HttpError as error:
         print(f"An error occurred: {error}")
         return
-
-def get_event_components() -> list:
-    """
-    Get a list of Event instances that contain the necessary data formatted correctly
-    """
-
-    events = get_calendar_events()
-
-    event_list = []
-    for event in events:
-        if "dateTime" in event["start"]:
-            start_time = datetime.fromisoformat(event["start"]["dateTime"])
-            end_time = datetime.fromisoformat(event["end"]["dateTime"])
-        else:
-            start_time = datetime.fromisoformat(event["start"]["date"])
-            end_time = datetime.fromisoformat(event["end"]["date"])
-
-        event_list.append( Event(title=event["summary"], start_time=start_time, end_time=end_time) )
-    
-    return event_list

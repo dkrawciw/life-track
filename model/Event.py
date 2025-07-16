@@ -1,10 +1,32 @@
 from datetime import datetime
+from src.access_google_calendar import get_calendar_events
+from dateutil import parser, tz
 
 def ordinal(n):
     if 11 <= n % 100 <= 13:
         return f"{n}th"
     else:
         return f"{n}{['th', 'st', 'nd', 'rd', 'th'][min(n % 10, 4)]}"
+
+def get_event_components() -> list:
+    """
+    Get a list of Event instances that contain the necessary data formatted correctly
+    """
+
+    events = get_calendar_events()
+
+    event_list = []
+    for event in events:
+        if "dateTime" in event["start"]:
+            start_time = parser.parse(event["start"]["dateTime"])
+            end_time = parser.parse(event["end"]["dateTime"])
+        else:
+            start_time = parser.parse(event["start"]["date"]).astimezone(tz.gettz('America/Denver'))
+            end_time = parser.parse(event["end"]["date"]).astimezone(tz.gettz('America/Denver'))
+
+        event_list.append( Event(title=event["summary"], start_time=start_time, end_time=end_time) )
+    
+    return event_list
 
 class Event:
     """
@@ -17,6 +39,17 @@ class Event:
 
         self.end_time = end_time
         self.details = details
+
+    @staticmethod
+    def get_df_columns() -> list:
+        """
+        Get the column names to make DataFrame work easier
+        """
+
+        return ["Title", "Start Time", "End Time", "Details"]
+
+    def to_list(self):
+        return [self.title, self.start_time, self.end_time, self.details]
 
     def to_html(self):
         output_html_list = []
