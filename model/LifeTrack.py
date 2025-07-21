@@ -1,6 +1,7 @@
 from datetime import datetime
 from dateutil import tz
 from model.Event import Event, get_event_components
+from model.SpotifyPodcast import SpotifyPodcast
 from src.send_email import send_email
 import pandas as pd
 
@@ -9,8 +10,9 @@ class LifeTrack:
     Singleton class that ties events, bank account, and school together and is able to write the email and send it eventually
     """
 
-    def __init__(self):
+    def __init__(self, spotify_show_id: str):
         self.events = []
+        self.spotify = SpotifyPodcast(show_id=spotify_show_id)
     
     def update_google_calendar_events(self) -> None:
         self.events += get_event_components()
@@ -118,7 +120,6 @@ class LifeTrack:
         output_html_list = [piece if piece is not None else "<h3>Nothing...</h3>" for piece in output_html_list]
 
         return " ".join(output_html_list)
-    
 
     """Final output functions for putting everything together"""
     def to_html(self):
@@ -127,7 +128,10 @@ class LifeTrack:
         """
         html_list = []
 
+        html_list.append(self.spotify.get_html())
         html_list.append(self.get_events_html())
+
+        html_list.append("<div></div>")
 
         return ''.join(html_list)
 
