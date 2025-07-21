@@ -11,8 +11,8 @@ load_dotenv(dotenv_path=PARENT_DIR / ".env")
 SPOTIPY_CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
 SPOTIPY_CLIENT_SECRET = os.getenv('SPOTIPY_CLIENT_SECRET')
 
-def get_podcast_info(show_id: str) -> dict:
-    sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET))
+def get_podcast_info(sp: spotipy.Spotify, show_id: str) -> dict:
+    # sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET))
     show_info = sp.show(show_id)
 
     show_info_dict = {
@@ -23,10 +23,10 @@ def get_podcast_info(show_id: str) -> dict:
 
     return show_info_dict
 
-def get_podcast_episodes(show_id: str, limit: int = 10):
+def get_podcast_episodes(sp: spotipy.Spotify, show_id: str, limit: int = 10):
     output_list = []
 
-    sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET))
+    # sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET))
     results = sp.show_episodes(show_id, limit=limit)
 
     for episode in results['items']:
@@ -43,12 +43,17 @@ def get_podcast_episodes(show_id: str, limit: int = 10):
 
     return output_list
 
+def get_podcast(show_id: str):
+    sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET))
+    info = get_podcast_info(sp=sp, show_id=show_id)
+    episodes = get_podcast_episodes(sp=sp, show_id=show_id)
+
+    return {
+        "info": info,
+        "episodes": episodes
+    }
+
 if __name__ == "__main__":
     TRUTH_UNITES_CODE = "5pwOh3BIp7rQaeZpmy8SF8"
 
-    podcast = get_podcast_info(TRUTH_UNITES_CODE)
-    episodes = get_podcast_episodes(TRUTH_UNITES_CODE)
-
-    print(podcast)
-    for episode in episodes:
-        print(episode)
+    print(get_podcast(TRUTH_UNITES_CODE))

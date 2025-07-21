@@ -5,8 +5,6 @@ Here, all of the messiness of talking to google's calendar api should be abstrac
 from datetime import datetime, timezone
 from pathlib import Path
 
-from model.Event import Event
-
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
