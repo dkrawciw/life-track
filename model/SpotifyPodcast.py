@@ -29,7 +29,7 @@ class SpotifyPodcast:
 
             self.episode_list.append(SpotifyEpisode(episode_name, release_date, duration_sec))
 
-    def get_html(self):
+    def to_html(self):
         html_list = []
         
         html_list.append("<div>")
